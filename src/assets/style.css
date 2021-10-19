@@ -1,0 +1,1130 @@
+.td-carlog *, 
+.td-carlog *:before, 
+.td-carlog *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.blocked:before,
+.blockedline:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgb(255 255 255 / 75%);
+    cursor: not-allowed;
+}
+
+.blocked:after,
+.blockedline:after {
+    content: "";
+    z-index: 1000;
+    border: 10px solid #ddd;
+    border-radius: 50%;
+    border-top: 10px solid #777;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: cir 1s linear infinite;
+    animation: cir 1s linear infinite;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+    top: 50%;
+}
+
+.blockedline:after {
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.entry-enter,
+.entry-leave-to {
+    opacity: 0;
+    transform: translateY(10%);
+}
+
+.entry-leave-active {
+    position: absolute;
+    width: 100%;
+}
+
+.slide-enter-active {
+   transition: 0.4s ease-in;
+}
+
+.slide-leave-active {
+    transition: 0.3s cubic-bezier(0.5, 0, 0.8, 0.4);
+}
+
+.slide-enter-to,
+.slide-leave {
+   max-height: 500px;
+   overflow: hidden;
+}
+
+.slide-enter,
+.slide-leave-to {
+   overflow: hidden;
+   max-height: 0;
+   opacity: 0;
+}
+
+body .main-area .content {
+    overflow: visible;
+}
+
+.content h1 {
+    /*display: none;*/
+}
+
+@-webkit-keyframes cir {
+    0% {
+        -webkit-transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(1turn)
+    }
+}
+
+@keyframes cir {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn)
+    }
+}
+
+.td-carlog {
+
+}
+
+.td-carlog__item {
+    display: flex;
+    border: 1px solid #b1b0b0;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.td-carlog__item-img {
+    position: relative;
+    width: 200px;
+    height: 120px;
+    margin: 0;
+    margin-right: 15px;
+}
+
+.td-carlog__item-img.no-img {
+    position: relative;
+    border-radius: 4px;
+    background-color: #eee;
+}
+
+.td-carlog__item-img.no-img:before {
+    content: "\6c";
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'topdetal';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 100px;
+    font-style: normal;
+    color: rgb(0 0 0 / 15%);
+}
+
+.td-carlog__item-img span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    padding: 4px 6px;
+    background-color: #555;
+    color: #fff;
+    font-weight: normal;
+    line-height: 1;
+    border-radius: 4px 0 8px 0;
+    font-size: 15px;
+}
+
+.td-carlog__item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+}
+
+.td-carlog__item-text {
+    width: calc(100% - 215px);
+}
+
+.td-carlog__item-name {
+    display: block;
+    color: #cd2128;
+    font-size: 16px;
+}
+
+.td-carlog__item-vin {
+    display: block;
+    font-size: 14px;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+.td-carlog__item-expert {
+    display: inline-block;
+    padding: 6px 8px;
+    border: 1px solid #0099ff;
+    color: #0099ff;
+    margin-top: 10px;
+    border-radius: 4px;
+    line-height: 1;
+    font-size: 13px;
+    -webkit-transition: .2s;
+    transition: .2s;
+    text-align: center;
+}
+
+.td-carlog__item-expert:hover {
+    background-color: #0099ff;
+    color: #fff;
+}
+
+.td-carlog {
+    position: relative;
+    border: 1px solid #b1b0b0;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+}
+
+.td-carlog h3 {
+    display: inline-block;
+}
+
+.td-carlog__btn {
+    position: relative;
+    display: inline-block;
+    color: #fff;
+    font-size: 16px;
+    background-color: #8dbc49;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.15px;
+    height: auto;
+    line-height: 1;
+    border: none;
+    -webkit-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;
+    
+}
+
+.td-carlog__btn.add {
+    padding-left: 30px;
+    margin-left: 15px;
+}
+
+.td-carlog__btn.add:before {
+    content: "+";
+    position: absolute;
+    left: 10px;
+    top: 0;
+    display: inline-block;
+    height: 100%;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 36px;
+}
+
+.td-carlog__btn:hover {
+    background-color: #7aa142;
+}
+
+.td-carlog__btn.cancel {
+    color: #aaa;
+    background-color: #fff;
+    margin-left: 10px;
+}
+
+.td-carlog__btn.cancel:hover {
+    background-color: #aaa;
+    color: #fff;
+}
+
+.td-carlog__btn.spare-add {
+    text-align: center;
+    background-color: transparent;
+    color: #cd2128;
+    font-size: 14px;
+    padding: 0;
+    border-bottom: 1px dashed;
+    line-height: 1.3;
+}
+
+.td-carlog__btn.spare-add:hover .info {
+    display: block;
+}
+
+.spare-add .info {
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    display: none;
+    width: 150px;
+    background-color: #333;
+    color: #fff;
+    font-size: 10px;
+    font-style: normal;
+    text-align: left;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-top: -18px;
+    line-height: 1.2;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.spare-add .info:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 11px;
+    left: -4px;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: #333;
+    transform: rotate(45deg);
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.td-carlog__descr {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin: 15px 0;
+    max-width: 375px;
+    padding-left: 40px;
+}
+
+.td-carlog__descr:before {
+    content: "i";
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    display: block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    margin-top: -9px;
+    border-radius: 50%;
+    font-style: italic;
+    font-weight: bold;
+    font-family: auto;
+    background-color: #777;
+}
+
+.td-carlog__descr.error {
+    background-color: #f8d7da;
+    color: #cd2027;
+}
+
+.td-carlog__descr.error:before {
+    background-color: #cd2027;
+}
+
+.td-carlog__form {
+    background-color: #efefef;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.td-carlog__form.formedit {
+    position: absolute;
+    z-index: 1;
+    width: calc(100% - 30px); 
+}
+
+.td-carlog__form-title {
+    display: block;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.td-carlog__form .btn {
+    display: inline-block;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #8dbc49;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.15px;
+    height: auto;
+    line-height: 1.3;
+    border: none;
+    -webkit-transition: .1s ease-in-out;
+    -o-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;
+    text-decoration: none;
+    width: 100%;
+    margin: 15px 0 0;
+}
+
+.td-carlog__form .btn:hover {
+    background-color: #7aa142;
+    color: #fff; 
+}
+
+.td-carlog__form .btn:active {
+    background-color: #729540;
+    -webkit-transform: scale(.99);
+    transform: scale(.99);
+}
+
+.td-carlog__form.result {
+    max-width: 320px;
+}
+
+.td-carlog__form.result h4 {
+    display: block;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: #83b043;
+    margin: 0 0 10px;
+}
+
+.td-carlog__form.result h4 b {
+    font-size: 18px;
+    color: #cd2128;
+}
+
+.td-carlog__form.result h4 .more {
+    margin: 15px 0 0;
+}
+
+.td-carlog__form.result h4 .more a {
+    color: #cd2128;
+    font-weight: bold;
+}
+
+.td-carlog__form-type,
+.td-carlog__form-number,
+.td-carlog__form-descr {
+    margin: 10px 0;
+}
+
+.td-carlog__form-type {
+    display: flex;
+    align-items: center;
+}
+
+.td-carlog__form-descr label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.td-carlog .inpt,
+.td-carlog textarea {
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.td-carlog .inpt:focus,
+.td-carlog textarea:focus {
+    border-color: #aaa;
+}
+
+.td-carlog .inpt::-webkit-outer-spin-button,
+.td-carlog .inpt::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;  
+}
+
+.td-carlog .inpt[type=number] {
+    -moz-appearance: textfield;
+}
+
+.td-carlog textarea {
+    width: 100%;
+    max-width: none;
+    height: 80px;
+    resize: none;
+    font-size: 14px;
+}
+
+.td-carlog__form-number {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.td-carlog__form-number .inpt {
+    width: 100%;
+    padding-right: 38px;
+}
+
+.td-carlog__form-number label {
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.td-carlog__form-number b {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.td-carlog__form-number label:last-child {
+    margin-right: 0;
+}
+
+.td-carlog__form-number .unit {
+    position: absolute;
+    bottom: 0;
+    right: 8px;
+    display: block;
+    height: 32px;
+    color: #777;
+    font-size: 13px;
+    line-height: 32px;
+}
+
+.td-carlog .v-select {
+    width: calc(100% - 140px);
+    background-color: #fff;
+}
+
+.td-carlog__select-item {
+    margin-left: -10px;
+}
+
+.td-carlog .vs__dropdown-option--highlight {
+    background-color: #ccc;
+    color: #333;
+}
+
+.td-carlog .vs--single.vs--open .vs__selected {
+    position: relative;
+}
+
+.td-carlog__select-item.selected {
+    margin-left: 0;
+}
+
+.td-carlog__select-item > i {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 0 8px 0 0;
+    vertical-align: middle;
+    background-image: url(images/sprite_icon.png);
+    background-repeat: no-repeat;
+}
+
+.td-carlog__select-item.selected > i {
+    filter: invert(26%) sepia(75%) saturate(4113%) hue-rotate(343deg) brightness(80%) contrast(101%);
+}
+
+.td-carlog__select-indicator {
+    position: relative;
+}
+
+.td-carlog__select-indicator {
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
+.td-carlog__select-indicator:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid #777;
+    border-right: 1px solid #777;
+    transform: rotate(45deg);
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.vs--open .td-carlog__select-indicator:before {
+    top: 6px;
+    transform: rotate(-135deg);
+}
+
+.td-carlog__list {
+    position: relative;
+
+}
+
+.td-carlog__list.blocked:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgb(255 255 255 / 75%);
+    cursor: not-allowed; 
+}
+
+.td-carlog__list.blocked:after {
+    content: "";
+    z-index: 1000;
+    border: 10px solid #ddd;
+    border-radius: 50%;
+    border-top: 10px solid #777;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: cir 1s linear infinite;
+    animation: cir 1s linear infinite;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -40px;
+    top: 50%;  
+}
+
+.td-carlog__list-item {
+    border-bottom: 1px solid #ccc;
+    border-radius: 2px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: all .5s;
+}
+
+.td-carlog__list-item:last-child {
+    border: none;
+}
+
+.td-carlog__list-item .name {
+    position: relative;
+    display: block;
+}
+
+.td-carlog__list-item .name:before {
+    content: "";
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background-color: #d6eeb3;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+}
+
+.td-carlog__list-item .name:after {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    background-image: url(images/sprite_icon.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 9px;
+    top: 9px;
+}
+
+.td-carlog .ico-1,
+.td-carlog .ico-1:after {
+    background-position: 0 0;
+}
+
+.td-carlog .ico-2,
+.td-carlog .ico-2:after {
+    background-position: 0 -30px;
+}
+
+.td-carlog .ico-3,
+.td-carlog .ico-3:after {
+    background-position: 0 -60px;
+}
+
+.td-carlog .ico-4,
+.td-carlog .ico-4:after {
+    background-position: 0 -90px;
+}
+
+.td-carlog .ico-5,
+.td-carlog .ico-5:after {
+    background-position: 0 -120px;
+}
+
+.td-carlog .ico-6,
+.td-carlog .ico-6:after {
+    background-position: 0 -150px;
+}
+
+/*** DATEPICKER ***/
+
+.td-carlog .mx-datepicker {
+    width: 130px;
+    margin-left: 10px;
+}
+
+.td-carlog .mx-input {
+    height: auto;
+    line-height: 1.3;
+    box-shadow: none;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.td-carlog .mx-input:hover {
+    border-color: #ccc;
+}
+
+.td-carlog .mx-input:focus {
+    border-color: #aaa;
+}
+
+.td-carlog .mx-icon-calendar span {
+    display: block;
+    width: 24px;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'topdetal';
+    font-size: 20px;
+    font-weight: normal;
+    color: #cd2128;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;
+    font-style: normal; 
+}
+
+body .mx-datepicker-popup {
+    border-radius: 4px;
+    color: #333;
+    font-size: 14px;
+}
+
+.mx-datepicker-popup .mx-table th {
+    color: #83b043;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.mx-datepicker-popup .mx-table-date td, 
+.mx-datepicker-popup .mx-table-date th,
+.mx-datepicker-popup .mx-calendar-content .cell {
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+.mx-datepicker-popup .mx-calendar-content .cell:hover {
+    color: inherit;
+    background-color: #eee;
+}
+
+.mx-datepicker-popup .mx-table-date .today {
+    color: #cd2128;
+}
+
+.mx-datepicker-popup .mx-calendar-content .cell.active {
+    color: #fff;
+    background-color: #83b043;
+}
+
+.mx-datepicker-popup .mx-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    line-height: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.mx-datepicker-popup .mx-btn-icon-double-left {
+    order: 1;
+}
+
+.mx-datepicker-popup .mx-btn-icon-left {
+    order: 2;
+}
+
+.mx-datepicker-popup .mx-calendar-header-label {
+    order: 3;
+}
+
+.mx-datepicker-popup .mx-btn-icon-right {
+    order: 4;
+}
+
+.mx-datepicker-popup .mx-btn-icon-double-right {
+    order: 5;
+}
+
+.mx-datepicker-popup .mx-btn {
+    color: #333;
+    font-size: 16px;
+}
+
+.mx-datepicker-popup .mx-btn-text {
+    padding: 6px;
+}
+
+.mx-datepicker-popup .mx-btn:hover {
+    border-color: #83b043;
+    color: #83b043;
+    background-color: #eee;
+}
+
+.td-carlog__form-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.td-carlog__form-left {
+    width: 375px;
+    margin-right: 25px;
+}
+
+.td-carlog__form-right {
+    width: calc(100% - 400px);
+}
+
+.td-carlog__form-footer {
+    margin-top: 30px;
+}
+
+.td-carlog__spare {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0 0;
+}
+
+.td-carlog__spare-filter {
+    padding: 0 0 10px;
+}
+
+.td-carlog__spare-filter input {
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 1.3;
+    width: 260px;  
+}
+
+.td-carlog__spare-filter input:focus {
+    border-color: #aaa;
+}
+
+.td-carlog__btn.spare-reset,
+.td-carlog__btn.spare-close {
+    font-size: 14px;
+    padding: 6px 14px;
+    background-color: #ddd;
+    color: #555;
+}
+
+.td-carlog__btn.spare-close {
+    background-color: #d6eeb3;
+}
+
+.td-carlog__btn.spare-reset:hover {
+    background-color: #aaa;
+    color: #fff; 
+}
+
+.td-carlog__spare-list {
+    position: relative;
+    min-height: 100px;
+    max-height: 200px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px;
+    background-color: #fbfbfb;
+    border: 1px solid #eee;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.td-carlog__spare-list::-webkit-scrollbar {
+    width: 10px;
+    background-color: rgb(245, 245, 245);
+}
+
+.td-carlog__spare-list::-webkit-scrollbar-thumb {
+    background-color: rgb(196, 196, 196);
+    border-radius: 8px;
+}
+
+.td-carlog__spare-list .spare__order-title {
+    color: #333;
+    font-size: 14px;
+}
+
+.td-carlog__btn.spare-load {
+    display: block;
+    width: 140px;
+    margin: 15px auto;
+    font-size: 14px;
+    text-align: center;
+    padding: 8px;
+    background-color: #d6eeb3;
+    color: #333;
+}
+
+.td-carlog__btn.spare-load:hover {
+    background-color: #8dbc49;
+    color: #fff;
+}
+
+.td-carlog__spare-item {
+    position: relative;
+    margin: 5px 0;
+}
+
+.td-carlog__spare-item input {
+    display: none;
+}
+
+.td-carlog__spare-item label {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    padding: 6px 10px 6px 34px;
+    line-height: 1.3;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #555;
+    word-break: break-all;
+}
+
+.td-carlog__spare-item label:before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    border: 1px solid #d1d1d1;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: -8px;
+}
+
+.td-carlog__spare-item  input[type=checkbox]:checked + label,
+.td-carlog__spare-item  input[type=checkbox]:checked + label.marked {
+    background-color: #ccc;
+    color: #333;
+}
+
+.td-carlog__spare-item label.marked {
+    background-color: #ddd;
+}
+
+.td-carlog__spare-item  input[type=checkbox]:checked + label:before {
+    content: "\2713";
+    font-weight: bold;
+    background-color: #83b043;
+    border-color: #83b043;
+    color: #fff;
+    text-align: center;
+    line-height: 14px;
+    font-size: 10px;
+}
+
+.td-carlog__spare-select {
+    display: block;
+    margin: 5px 0;
+    font-size: 14px; 
+}
+
+.td-carlog__spare-select .spare-select__item {
+    position: relative;
+    display: block;
+    margin: 5px 0;
+    background-color: #ddd;
+    padding: 6px 38px 6px 10px;
+    border-radius: 4px;
+    color: #333;
+    word-break: break-all;
+}
+
+.td-carlog__spare-empty {
+    text-align: center;
+    color: #cd2128;
+    margin: 15px 0;
+}
+
+.spare-select__item-delete {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: block;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
+    background-color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.spare-select__item-delete:before,
+.spare-select__item-delete:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -1px;
+    margin-left: -5px;
+    display: block;
+    width: 10px;
+    height: 2px;
+    border: none;
+    background-color: #fff;
+    transform: rotate(45deg); 
+}
+
+.spare-select__item-delete:after {
+    transform: rotate(135deg);
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+    .td-carlog__form-left {
+        width: 100%;
+        margin-right: calc(100% - 375px);
+    }
+
+    .td-carlog__form-right {
+        width: 100%;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+
+    .td-carlog {
+        margin: 0 -15px;
+        border-radius: 0;
+        border-right: 0;
+        border-left: 0;
+    }
+
+    .td-carlog__form {
+        margin: 0 -15px 15px -15px;
+        padding: 15px;
+        border-radius: 0;
+    }
+
+}
+
+@media only screen and (max-width: 480px) {
+
+    .td-carlog__btn.add {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .td-carlog__btn.add:before {
+        top: 8px;
+        font-size: 18px;
+    }
+
+    .td-carlog__item {
+        border: 0;
+        margin: 0 -15px; 
+    }
+
+}
+
+
+@media only screen and (max-width: 420px) {
+
+    .td-carlog__item-img {
+        width: 160px;
+        height: 100px;
+    }
+
+    .td-carlog__item-text {
+        width: calc(100% - 175px);
+    }
+
+    .td-carlog__btn.add {
+        display: block;
+        margin: 0;
+    }
+
+    .td-carlog__list {
+        margin: 20px 0;
+    }
+
+    .td-carlog .vs__search {
+        display: none;
+    }
+
+    .td-carlog .vs__actions {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        background-color: #fff;
+        height: calc(100% - 6px);
+    }
+
+    .td-carlog__form-left {
+        margin-right: 0;
+    }
+
+    .td-carlog__select-item.selected {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .td-carlog .vs__dropdown-toggle {
+        height: 42px;
+        overflow: hidden;
+    }
+
+
+
+}
