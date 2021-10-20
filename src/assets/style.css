@@ -453,6 +453,7 @@ body .main-area .content {
 
 .td-carlog .inpt,
 .td-carlog textarea {
+    font-family: 'OpenSans', Arial, Helvetica, sans-serif;
     border: 1px solid #d1d1d1;
     border-radius: 4px;
     padding: 10px;
@@ -1027,6 +1028,55 @@ body .mx-datepicker-popup {
     transform: rotate(135deg);
 }
 
+.td-carlog__pagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    list-style: none;
+    font-size: 16px;
+    margin: 40px 0 15px;
+    padding: 0;
+}
+
+.td-carlog__pagen li a {
+    display: block;
+    padding: 6px 8px;
+    margin-right: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    line-height: 1;
+    min-width: 30px;
+    text-align: center;
+    font-size: 14px;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.td-carlog__pagen li a:hover {
+    background-color: #ddd;
+}
+
+.td-carlog__pagen li.disabled a {
+    background-color: transparent;
+    cursor: default;
+}
+
+.td-carlog__pagen li.disabled:first-child a,
+.td-carlog__pagen li.disabled:last-child a {
+    color: #aaa;
+}
+
+.td-carlog__pagen li.active a {
+    background-color: #8dbc49;
+    color: #fff;
+    cursor: default;
+}
+
+.td-carlog .vs__dropdown-toggle {
+    height: 42px;
+    overflow: hidden;
+}
 
 @media only screen and (max-width: 1024px) {
 
@@ -1119,12 +1169,5 @@ body .mx-datepicker-popup {
         align-items: center;
         white-space: nowrap;
     }
-
-    .td-carlog .vs__dropdown-toggle {
-        height: 42px;
-        overflow: hidden;
-    }
-
-
 
 }
