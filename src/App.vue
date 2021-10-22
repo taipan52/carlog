@@ -1,43 +1,77 @@
 <template>
     <div id="app">
 
-        <div class="td-carlog">
+        <div v-cloak>
 
-            <h3>Журнал обслуживания</h3>
-            <span class="td-carlog__btn add" @click="addForm = !addForm">Добавить запись</span>
+            <div v-if="!carLog.error" class="td-carlog" ref="carLogTop">
 
-            <Form v-if="addForm"/>
+                <h3>Журнал обслуживания</h3>
+                <span v-if="!showFormAdd" class="td-carlog__btn add" @click="switchFormAdd(true)">Добавить запись</span>
 
-            <!-- список записей -->
-            <div class="td-carlog__list" ref="carLogListTop">
+                <Form v-if="showFormAdd" :entry="false"/>
 
-                <transition-group name="entry" :duration="500" tag="div">
-                <div v-for="item in carLog.list" :key="item.id" class="td-carlog__list-item">
-                    <div class="name" :class="'ico-'+item.type.id">{{item.type.name}}</div>
-                    <span class="date">{{item.date}}</span>
-                    <span class="price">{{item.price}}</span>
-                    <span class="mileage">{{item.mileage}}</span>
-                    <span class="descr">{{item.descr}}</span>
-                    <span class="td-carlog__btn">Удалить</span>
-                    <span class="td-carlog__btn">Изменить</span>
+                <!-- список записей -->
+                <div class="td-carlog__list" ref="carLogListTop" :class="{'blocked':carLogListLoad}">
 
-                    <ul v-if="item.basket">
-                        <li v-for="prod in item.basket" :key="prod.ID">{{prod.NAME}}</li>
-                    </ul>
+                    <paginate
+                        v-if="carLog.listPgn.pages > 1"
+                        v-model="carLog.listPgn.page"
+                        :page-count="carLog.listPgn.pages"
+                        :click-handler="setPage"
+                        :prev-text="'Пред.'"
+                        :next-text="'След.'"
+                        :container-class="'td-carlog__pagen'">
+                    </paginate>
+
+                    <transition-group name="entry" :duration="500" tag="div">
+                    <div v-for="item in carLogList" :key="item.id" class="td-carlog__list-item">
+
+                        <div class="list-item__control">
+                            <!-- Удалить запись -->
+                            <div class="list-item__delete-block">
+                                <span class="btn" @click="switchPreDel({id:item.id, val:true})" title="Удалить">Удалить</span>
+                                <div class="list-item__delete-popup" :class="{'show': item.preDel}">
+                                    <span class="close" @click="switchPreDel({id:item.id, val:false})">Закрыть</span>
+                                    <p>Вы уверены?<br>Запись будет удалена <b>безвозвратно</b>!</p>
+                                    <span class="td-carlog__btn" @click="deleteItemCarLog(item.id)">Удалить</span>
+                                </div>						
+                            </div>
+                            <span class="td-carlog__btn edit" @click="switchFormEdit({id:item.id, val:true})" title="Изменить">Изменить</span>                       
+                        </div>
+
+                        <div class="name" :class="'ico-'+item.type.id"> <b>{{item.id}}</b> {{item.type.name}}</div>
+                        <span class="date">{{item.date}}</span>
+                        <span class="price">{{Number(item.price).toLocaleString('ru')}}</span>
+                        <span class="mileage">{{Number(item.mileage).toLocaleString('ru')}}</span>
+                        <span class="descr">{{item.descr}}</span>
+
+                        <ul v-if="item.basket">
+                            <li v-for="prod in item.basket" :key="prod.ID">{{prod.NAME}}</li>
+                        </ul>
+
+                        <Form v-if="item.edit" :entry="item"/>
+
+                    </div>
+                    </transition-group>
+
+                    <!-- В журнале нет записей -->
+                    <p v-if="carLogList.length == 0" class="td-carlog__descr note">В журнале пока нет ни одной записи</p>
+
+                    <paginate
+                        v-if="carLog.listPgn.pages > 1"
+                        v-model="carLog.listPgn.page"
+                        :page-count="carLog.listPgn.pages"
+                        :click-handler="setPage"
+                        :prev-text="'Пред.'"
+                        :next-text="'След.'"
+                        :container-class="'td-carlog__pagen'">
+                    </paginate>
 
                 </div>
-                </transition-group>
-
-                <paginate
-                    v-model="carLog.listPgn.page"
-                    :page-count="carLog.listPgn.pages"
-                    :click-handler="carLogPagen"
-                    :prev-text="'Пред.'"
-                    :next-text="'След.'"
-                    :container-class="'td-carlog__pagen'">
-                </paginate>
 
             </div>
+            
+            <p v-else class="td-carlog__descr note">{{carLog.error}}</p>
 
         </div>
 
@@ -47,7 +81,7 @@
 
 <script>
 
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 import Form from './components/form.vue'
 
 
@@ -57,22 +91,25 @@ export default {
         Form: Form
     },
 
-    data(){
-        return {
-            page: 1,
-            addForm: false,
-        }
-    },
-
     created() {
 
-        //получаем номер страницы
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        let pageValue = urlParams.get('page'),
-            page = pageValue ? Number( pageValue.replace(/\D/g, '') ) : 1;
+        //ПАРСИНГ GET ПАРАМЕТРОВ
+        let uri = window.location.href.split('?');
+        if (uri.length == 2) {
+            let vars = uri[1].split('&');
+            let getVars = {};
+            let tmp = '';
 
-        this.page = page;
+            vars.forEach(function(v){
+                tmp = v.split('=');
+
+                if(tmp.length == 2) getVars[tmp[0]] = tmp[1];
+            });
+
+            this.updateGetUrl(getVars);
+ 
+        }
+
     },
 
     computed: {
@@ -80,16 +117,16 @@ export default {
         //store значения
         ...mapGetters([
             'carLog',
+            'carLogList',
+            'carLogListLoad',
+            'showFormAdd',
         ]),
+
     },
 
     mounted() {
-
-        this.fetchCarLog({
-            limit: this.carLog.listPgn.limit,
-            page: this.page
-        });
-
+        //выводим список записей
+        this.fetchCarLog();
     },
 
     methods: {
@@ -97,32 +134,25 @@ export default {
         //store методы
         ...mapActions([
             'fetchCarLog',
+            'pagenCarLog',
+            'deleteItemCarLog',
+        ]),
+        ...mapMutations([
+            'updateGetUrl',
+            'switchFormAdd',
+            'switchFormEdit',
+            'switchPreDel',
         ]),
 
         //пагинация
-        carLogPagen(page){
+        setPage(page){
 
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-
-            if(page == 1) {
-                urlParams.delete('page');
-            }
-            else {
-                urlParams.set('page', page);
-            }
-
-            history.pushState(null, null, "?"+urlParams.toString());
-
-            this.fetchCarLog({
-                limit: this.carLogElemLimit,
-                page: page
-            });
-
+            this.pagenCarLog(page);
             //скрол вверх
-            this.$refs.carLogListTop.scrollIntoView({behavior: 'smooth'});
+            this.$refs.carLogTop.scrollIntoView({behavior: 'smooth'});
 
-        }
+        },
+
     }
 
 

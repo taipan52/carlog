@@ -1,6 +1,6 @@
 <template>
     <!-- Форма добавления/редактирования записи -->
-    <transition name="slide">
+    
     <div class="td-carlog__form">
 
         <b class="td-carlog__form-title">Добавление записи</b>
@@ -49,33 +49,31 @@
 
                 </div>
 
-                <div class="td-carlog__form-number">
-                    <label>
+                <div class="td-carlog__form-group">
+                    <div class="td-carlog__form-number">
                         <input 
+                            v-model="form.price"
                             class="inpt" 
-                            @input="changeNumber($event, 'price')"
-                            type="tel" 
-                            autocomplete="off" 
-                            placeholder="Сумма">
+                            v-money="money">
+                        <label :class="{'focus': (form.price.length > 1 || form.price > 0) }">Стоимость</label>
                         <span class="unit">руб.</span>
-                    </label>
-                    <label>
+                    </div>
+                    <div class="td-carlog__form-number"> 
                         <input 
+                            v-model="form.mileage"
                             class="inpt" 
-                            @input="changeNumber($event, 'mileage')"
-                            type="tel" 
-                            autocomplete="off" 
-                            placeholder="Пробег">
-                            <span class="unit">км.</span>
-                    </label>
-                </div>
+                            v-money="money">
+                        <label :class="{'focus': (form.mileage.length > 1 || form.mileage > 0)}">Пробег</label>
+                        <span class="unit">км.</span>
+                    </div>
+                </div> 
 
             </div>
 
             <div class="td-carlog__form-right">
                 <div class="td-carlog__form-descr">
-                    <label>Описание</label>
-                    <textarea v-model="form.descr" placeholder="Описание"></textarea>
+                    <textarea v-model="form.descr"></textarea>
+                    <label :class="{'focus': form.descr.length > 0}">Описание</label>
                 </div>				
             </div>				
         </div>
@@ -130,17 +128,17 @@
         </div>
 
     </div>
-    </transition>
+    
 </template>
 
 <script>
 
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
     name: 'Form',
     props: {
-        msg: String
+        entry: {},
     },
     data() {
         return {
@@ -154,8 +152,14 @@ export default {
                     firstDayOfWeek: 1,				
                 },
             },
-
-            //потом удалить
+            money: {
+                decimal: ',',
+                thousands: ' ',
+                prefix: '',
+                suffix: '',
+                precision: 0,
+                masked: false
+            },
             form:{
                 type: {},
                 date: new Date(),
@@ -164,6 +168,8 @@ export default {
                 spareParts: [],
                 descr: '',
             },
+
+            //потом удалить
             spare: {
                 filter: '',
                 list: [],
@@ -179,13 +185,30 @@ export default {
         }
     },
     created() {
-        this.form.type = this.carLog.type[0];
+
+        if(this.entry) {
+
+            const entry = this.entry;
+            let arrDate =  entry.date.split('.');
+
+            this.form.type = entry.type;
+            this.form.date = new Date(arrDate[2], arrDate[1]-1, arrDate[0]);
+            this.form.price = entry.price;
+            this.form.mileage = entry.mileage;
+            this.form.descr = entry.descr;
+        }
+        else {
+            this.form.type = this.carLog.type[0];
+        }
+
+        
+
     },
     computed: {
 
         //store значения
         ...mapGetters([
-            'carLog',
+            'carLog'
         ]),
     },
     methods: {
@@ -193,6 +216,10 @@ export default {
         //store методы
         ...mapActions([
             'createItemCarLog',
+        ]),
+
+        ...mapMutations([
+            'switchFormAdd'
         ]),
 
         //очитска формы
@@ -213,7 +240,6 @@ export default {
 		changeNumber(e, item){
 
 			let value = e.target.value;
-
 			//убираем пробелы
 			value = value.replace(/\s/g, '');
 			//убираем не числа
@@ -225,7 +251,6 @@ export default {
 			else {
 				value = '';
 			}
-
 			this.form[item] = e.target.value = value;
 
 		},
@@ -246,8 +271,8 @@ export default {
                 id: 0,
                 type: this.form.type,
                 date: this.form.date.toLocaleDateString('ru-RU'),
-                price: this.form.price.replace (/\D/, ''),
-                mileage: this.form.mileage.replace (/\D/, ''),
+                price: this.form.price,
+                mileage: this.form.mileage,
                 descr: this.form.descr,
             };
 
@@ -255,7 +280,6 @@ export default {
 
             if(ans.success) {
                 //скрываем форму
-                console.log(ans);
                 this.clearForm();
             }
             else {
@@ -266,6 +290,7 @@ export default {
 
         },
         formCancel() {
+            this.switchFormAdd(false);
             this.clearForm();
         },
 

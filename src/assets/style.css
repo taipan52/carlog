@@ -56,7 +56,7 @@
     width: 100%;
 }
 
-.slide-enter-active {
+/*.slide-enter-active {
    transition: 0.4s ease-in;
 }
 
@@ -75,7 +75,7 @@
    overflow: hidden;
    max-height: 0;
    opacity: 0;
-}
+}*/
 
 body .main-area .content {
     overflow: visible;
@@ -83,6 +83,17 @@ body .main-area .content {
 
 .content h1 {
     /*display: none;*/
+}
+
+@keyframes popover {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
 }
 
 @-webkit-keyframes cir {
@@ -103,6 +114,44 @@ body .main-area .content {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn)
     }
+}
+
+@keyframes open {
+    0% {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+[v-cloak] {
+    display: block;
+    padding: 50px 0;
+}
+
+[v-cloak]:before {
+    content: "";
+    z-index: 1000;
+    border: 10px solid #ddd;
+    border-radius: 50%;
+    border-top: 10px solid #777;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: cir 1s linear infinite;
+    animation: cir 1s linear infinite;
+    position: absolute;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -40px;
+    top: 50%;
+}
+
+[v-cloak]>* {
+    opacity: 0;
+    max-height: 100px;
 }
 
 .td-carlog {
@@ -361,6 +410,14 @@ body .main-area .content {
     background-color: #efefef;
     border-radius: 4px;
     padding: 20px;
+
+    visibility: visible;
+    min-height: 300px;
+    max-height: 480px;
+    -webkit-animation: open .3s normal;
+    animation: open .3s normal;
+    transform-origin: 50% 0;
+
 }
 
 .td-carlog__form.formedit {
@@ -436,7 +493,7 @@ body .main-area .content {
 }
 
 .td-carlog__form-type,
-.td-carlog__form-number,
+.td-carlog__form-group,
 .td-carlog__form-descr {
     margin: 10px 0;
 }
@@ -444,11 +501,6 @@ body .main-area .content {
 .td-carlog__form-type {
     display: flex;
     align-items: center;
-}
-
-.td-carlog__form-descr label {
-    display: block;
-    margin-bottom: 5px;
 }
 
 .td-carlog .inpt,
@@ -480,12 +532,12 @@ body .main-area .content {
 .td-carlog textarea {
     width: 100%;
     max-width: none;
-    height: 80px;
+    height: 105px;
     resize: none;
     font-size: 14px;
 }
 
-.td-carlog__form-number {
+.td-carlog__form-group {
     margin: 20px 0;
     display: flex;
     align-items: center;
@@ -496,7 +548,7 @@ body .main-area .content {
     padding-right: 38px;
 }
 
-.td-carlog__form-number label {
+.td-carlog__form-number {
     position: relative;
     display: inline-block;
     width: 50%;
@@ -504,25 +556,71 @@ body .main-area .content {
     font-weight: normal;
 }
 
-.td-carlog__form-number b {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: normal;
+.td-carlog__form-number:last-child {
+    margin-right: 0;
 }
 
-.td-carlog__form-number label:last-child {
-    margin-right: 0;
+.td-carlog__form-descr {
+    position: relative;
+}
+
+.td-carlog__form-number label,
+.td-carlog__form-descr label {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+    display: block;
+    height: 20px;
+    color: #777;
+    font-size: 16px;
+    line-height: 20px;
+    background-color: #fff;
+    padding: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: .3s cubic-bezier(.25,.8,.5,1);
+}
+
+.td-carlog__form-number .inpt:focus ~ label,
+.td-carlog__form-descr textarea:focus ~ label,
+.td-carlog__form-number label.focus,
+.td-carlog__form-descr label.focus {
+    top: -10px;
+    left: 5px;
+    background-color: transparent;
+    color: #333;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.td-carlog__form-number .inpt:focus ~ label:before,
+.td-carlog__form-descr textarea:focus ~ label:before,
+.td-carlog__form-number label.focus:before,
+.td-carlog__form-descr label.focus:before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 10px;
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+
 }
 
 .td-carlog__form-number .unit {
     position: absolute;
     bottom: 0;
-    right: 8px;
+    right: 10px;
     display: block;
-    height: 32px;
+    height: 36px;
     color: #777;
-    font-size: 13px;
-    line-height: 32px;
+    font-size: 14px;
+    line-height: 30px;
 }
 
 .td-carlog .v-select {
@@ -604,7 +702,7 @@ body .main-area .content {
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgb(255 255 255 / 75%);
+    background-color: rgb(255 255 255 / 30%);
     cursor: not-allowed; 
 }
 
@@ -626,11 +724,13 @@ body .main-area .content {
 }
 
 .td-carlog__list-item {
+    position: relative;
     border-bottom: 1px solid #ccc;
     border-radius: 2px;
-    padding: 10px;
+    padding: 10px 50px 10px 10px;
     margin-bottom: 10px;
     transition: all .5s;
+    min-height: 100px;
 }
 
 .td-carlog__list-item:last-child {
@@ -665,6 +765,32 @@ body .main-area .content {
     position: absolute;
     left: 9px;
     top: 9px;
+}
+
+.td-carlog__list-item .price {
+    position: relative;
+    display: inline-block;
+    padding: 4px 6px;
+    background-color: #aaa;
+    color: #fff;
+    margin: 0 5px;
+    border-radius: 4px;
+}
+
+.td-carlog__list-item .price:after {
+    content: "₽";
+    display: inline-block;
+    margin-left: 3px;
+}
+
+.td-carlog__list-item .mileage {
+    position: relative;
+    display: inline-block;
+    padding: 4px 6px;
+    background-color: #888;
+    color: #fff;
+    margin-right:10px;
+    border-radius: 4px;
 }
 
 .td-carlog .ico-1,
@@ -1077,6 +1203,143 @@ body .mx-datepicker-popup {
     height: 42px;
     overflow: hidden;
 }
+
+.list-item__control {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 100%;
+}
+
+.list-item__control .edit {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    font-size: 0;
+    display: block;
+    width: 30px;
+    height: 30px;
+    padding: 0;  
+}
+
+.list-item__delete-block {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.list-item__delete-block .btn {
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+    font-size: 0;
+    background-color: #777;
+    border-radius: 4px;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.list-item__delete-block .btn:hover {
+    background-color: #cd2128;
+}
+
+.list-item__delete-block .btn:before,
+.list-item__delete-block .btn:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -1px;
+    margin-left: -7px;
+    display: block;
+    width: 14px;
+    height: 2px;
+    border: none;
+    background-color: #fff;
+    transform: rotate(45deg);
+}
+
+.list-item__delete-block .btn:after {
+    transform: rotate(135deg);
+}
+
+.list-item__delete-popup {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    top: -10px;
+    padding: 15px 30px 15px 20px;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 14px;
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
+    line-height: 1.3;
+    background-color: #fff;
+    -webkit-animation: popover .2s ease-in-out;
+    -moz-animation: popover .2s ease-in-out;
+    animation: popover .2s ease-in-out;
+}
+
+.list-item__delete-popup.show {
+    display: block
+}
+
+.list-item__delete-popup .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 30px;
+    height: 30px;
+    font-size: 0;
+    cursor: pointer;
+}
+
+.list-item__delete-popup .close:before,
+.list-item__delete-popup .close:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -1px;
+    margin-left: -7px;
+    display: block;
+    width: 12px;
+    height: 1px;
+    border: none;
+    background-color: #aaa;
+    transform: rotate(45deg);
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.list-item__delete-popup .close:after {
+    transform: rotate(135deg);
+}
+
+.list-item__delete-popup .close:hover:before,
+.list-item__delete-popup .close:hover:after {
+    background-color: #777;
+}
+
+.list-item__delete-popup p {
+    font-size: 12px;
+    margin: 0 10px 0 0; 
+}
+
+.list-item__delete-popup .td-carlog__btn {
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-top: 8px;
+    background-color: #cd2128;
+}
+ 
 
 @media only screen and (max-width: 1024px) {
 
