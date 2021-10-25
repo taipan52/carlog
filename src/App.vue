@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="carlog">
 
         <div v-cloak>
 
@@ -24,33 +24,36 @@
                     </paginate>
 
                     <transition-group name="entry" :duration="500" tag="div">
+
                     <div v-for="item in carLogList" :key="item.id" class="td-carlog__list-item">
+                        <div v-if="!item.edit" class="list-item__wrap" :class="{more:item.more}" @click="showMore(item.id)">
 
-                        <div class="list-item__control">
-                            <!-- Удалить запись -->
-                            <div class="list-item__delete-block">
-                                <span class="btn" @click="switchPreDel({id:item.id, val:true})" title="Удалить">Удалить</span>
-                                <div class="list-item__delete-popup" :class="{'show': item.preDel}">
-                                    <span class="close" @click="switchPreDel({id:item.id, val:false})">Закрыть</span>
-                                    <p>Вы уверены?<br>Запись будет удалена <b>безвозвратно</b>!</p>
-                                    <span class="td-carlog__btn" @click="deleteItemCarLog(item.id)">Удалить</span>
-                                </div>						
+                            <div class="list-item__control">
+                                <!-- Удалить запись -->
+                                <div class="list-item__delete-block">
+                                    <span class="btn" @click="switchPreDel({id:item.id, val:true})" title="Удалить">Удалить</span>
+                                    <div class="list-item__delete-popup" :class="{'show': item.preDel}">
+                                        <span class="close" @click="switchPreDel({id:item.id, val:false})">Закрыть</span>
+                                        <p>Вы уверены?<br>Запись будет удалена <b>безвозвратно</b>!</p>
+                                        <span class="td-carlog__btn" @click="deleteItemCarLog(item.id)">Удалить</span>
+                                    </div>						
+                                </div>
+                                <span class="td-carlog__btn edit" @click="switchFormEdit({id:item.id, val:true})" title="Изменить">Изменить</span>                       
                             </div>
-                            <span class="td-carlog__btn edit" @click="switchFormEdit({id:item.id, val:true})" title="Изменить">Изменить</span>                       
+
+                            <div class="name" :class="'ico-'+item.type.id">
+                                <span class="date">{{item.date}}</span>
+                                <span class="name-text"><b>{{item.id}}</b> {{item.type.name}}</span>
+                                <span class="mileage">{{Number(item.mileage).toLocaleString('ru')}}</span>
+                            </div>
+                            <span class="price">{{Number(item.price).toLocaleString('ru')}}</span>
+                            <p class="descr">{{item.descr}}</p>
+
+                            <ul v-if="item.basket.length > 0" class="option-list">
+                                <li v-for="prod in item.basket" :key="prod.ID">{{prod.NAME}}</li>
+                            </ul>
                         </div>
-
-                        <div class="name" :class="'ico-'+item.type.id"> <b>{{item.id}}</b> {{item.type.name}}</div>
-                        <span class="date">{{item.date}}</span>
-                        <span class="price">{{Number(item.price).toLocaleString('ru')}}</span>
-                        <span class="mileage">{{Number(item.mileage).toLocaleString('ru')}}</span>
-                        <span class="descr">{{item.descr}}</span>
-
-                        <ul v-if="item.basket">
-                            <li v-for="prod in item.basket" :key="prod.ID">{{prod.NAME}}</li>
-                        </ul>
-
-                        <Form v-if="item.edit" :entry="item"/>
-
+                        <Form v-else :entry="item"/>
                     </div>
                     </transition-group>
 
@@ -144,6 +147,22 @@ export default {
             'switchPreDel',
         ]),
 
+        //Подробнее
+        showMore(id) {
+
+            this.carLogList.forEach(function(item){
+                if(item.id == id) {
+                    item.more = true;
+                }
+                else {
+                    item.more = false;
+                    item.edit = false;
+                    item.preDel = false;
+                }
+            });
+
+        },
+
         //пагинация
         setPage(page){
 
@@ -163,7 +182,13 @@ export default {
 
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 
-    #app {
+    body {
+        margin: 0;
+        overflow-x: hidden;
+        padding: 15px;
+    }
+
+    #carlog {
         font-family: 'OpenSans', Arial, Helvetica, sans-serif;
         font-size: 15px;
         color: #474747;

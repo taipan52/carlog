@@ -3,13 +3,25 @@
     
     <div class="td-carlog__form">
 
-        <b class="td-carlog__form-title">Добавление записи</b>
+        <b class="td-carlog__form-title">{{formTextTitle}}</b>
 
         <div class="td-carlog__form-wrap">
 
             <div class="td-carlog__form-left">
                 
                 <div class="td-carlog__form-type">
+
+                    <date-picker 
+                        :lang="datePickerLang"
+                        v-model="form.date" 
+                        :editable="false"
+                        :clearable="false"
+                        title-format="DD MMMM YYYY"
+                        format="DD.MM.YYYY">
+                            
+                        <template #icon-calendar><span>d</span></template>
+
+                    </date-picker>
 
                     <v-select 
                         :options="carLog.type" 
@@ -35,36 +47,24 @@
 
                     </v-select>
 
-                    <date-picker 
-                        :lang="datePickerLang"
-                        v-model="form.date" 
-                        :editable="false"
-                        :clearable="false"
-                        title-format="DD MMMM YYYY"
-                        format="DD.MM.YYYY">
-                            
-                        <template #icon-calendar><span>d</span></template>
-
-                    </date-picker>
-
                 </div>
 
                 <div class="td-carlog__form-group">
-                    <div class="td-carlog__form-number">
-                        <input 
-                            v-model="form.price"
-                            class="inpt" 
-                            v-money="money">
-                        <label :class="{'focus': (form.price.length > 1 || form.price > 0) }">Стоимость</label>
-                        <span class="unit">руб.</span>
-                    </div>
                     <div class="td-carlog__form-number"> 
-                        <input 
+                        <money 
                             v-model="form.mileage"
                             class="inpt" 
-                            v-money="money">
+                            v-bind="money"></money>
                         <label :class="{'focus': (form.mileage.length > 1 || form.mileage > 0)}">Пробег</label>
                         <span class="unit">км.</span>
+                    </div>
+                    <div class="td-carlog__form-number">
+                        <money 
+                            v-model="form.price"
+                            class="inpt" 
+                            v-bind="money"></money>
+                        <label :class="{'focus': (form.price.length > 1 || form.price > 0) }">Стоимость</label>
+                        <span class="unit">руб.</span>
                     </div>
                 </div> 
 
@@ -78,51 +78,19 @@
             </div>				
         </div>
 
-        <!-- ЗАПЧАСТИ -->
-        <div class="td-carlog__spare-select">
-            <span class="spare-select__item" v-for="item in spareSelectList" :key="item.ID">
-                {{item.PROPS.brand_title}} <b>{{item.PROPS.original_article}}</b> {{item.NAME}} - <b>{{item.PRICE}}</b>руб.
-                <i class="spare-select__item-delete" title="Удалить" @click="deleteAddSpareItem(item.ID)"></i>
-            </span>
-        </div>
-
-        <span v-if="!showFormSpare" class="td-carlog__btn spare-add" @click="getBasketItems()">
-            {{spareAddText}}
-            <i class="info">Запчасти будут выбраны из ваших заказов</i>
-        </span>
-
-        <div v-if="showFormSpare" class="td-carlog__spare">
-
-            <!-- фильтр -->
-            <div v-if="spare.list.length > 0" class="td-carlog__spare-filter">
-                <input v-model="spare.filter" type="text" placeholder="Начните вводить для фильтрации" @input="setSpareFilter">
-            </div>
-
-            <!-- список запчастей -->
-            <div class="td-carlog__spare-list" :class="{ blocked: spare.blocked }">
-
-                <div v-for="order in spare.list" :key="order.ID" class="td-carlog__spare-order" ref="spareOrder">
-                    <b class="spare__order-title">Заказ {{order.ID}} ({{order.DATE_INSERT}}) на сумму {{order.PRICE}}руб.</b>
-                    <div v-for="item in order.BASKET" :key="item.ID" class="td-carlog__spare-item">
-                        <input :id="item.ID" type="checkbox" :value="item.ID" @change="setSpare($event, item)" :checked="item.CHECKED">
-                        <label :for="item.ID">{{item.PROPS.brand_title}} <b>{{item.PROPS.original_article}}</b> {{item.NAME}} - <b>{{item.PRICE}}</b>руб.</label>
-                    </div>						
-                </div>
-
-                <p v-if="spare.empty" class="td-carlog__spare-empty">Список ваших заказов пуст</p>
-
-                <span v-if="spare.more" class="td-carlog__btn spare-load" @click="loadBasketItems">Загрузить ещё</span>
-    
-            </div>
-
-            <span class="td-carlog__btn spare-close" @click="spareClose">{{spareCloseText}}</span>
-            <span v-if="add.spareParts.length > 0" class="td-carlog__btn spare-reset" @click="spareReset">Сбросить</span>
-            
-        </div>
+        <!-- Запчасти / Услуги -->
+        <Options list=""/>
 
         <p v-if="formError" class="td-carlog__descr error">{{formError}}</p>
 
-        <div class="td-carlog__form-footer">
+        <!-- Редактирование -->
+        <div v-if="entry" class="td-carlog__form-footer">
+            <span class="td-carlog__btn" @click="formEdit">Изменить</span>
+            <span class="td-carlog__btn cancel" @click="formEditCancel">Отмена</span>				
+        </div>
+
+        <!-- Добавление -->
+        <div v-else class="td-carlog__form-footer">
             <span class="td-carlog__btn" @click="formSubmit">Добавить</span>
             <span class="td-carlog__btn cancel" @click="formCancel">Отмена</span>				
         </div>
@@ -134,11 +102,15 @@
 <script>
 
 import {mapGetters, mapActions, mapMutations} from 'vuex'
+import Options from './options.vue'
 
 export default {
     name: 'Form',
     props: {
         entry: {},
+    },
+    components: {
+        Options: Options
     },
     data() {
         return {
@@ -168,22 +140,11 @@ export default {
                 spareParts: [],
                 descr: '',
             },
-
-            //потом удалить
-            spare: {
-                filter: '',
-                list: [],
-                blocked: false,
-                more: false,
-                empty: false,
-                page: 0,
-            },
             formError: false,
-            showForm: false,
-            showFormSpare: false,
 
         }
     },
+
     created() {
 
         if(this.entry) {
@@ -210,12 +171,18 @@ export default {
         ...mapGetters([
             'carLog'
         ]),
+
+        formTextTitle() {
+            return this.entry ? 'Редактирование записи' : 'Добавление записи';
+        },
+
     },
     methods: {
 
         //store методы
         ...mapActions([
             'createItemCarLog',
+            'editItemCarLog',
         ]),
 
         ...mapMutations([
@@ -255,13 +222,6 @@ export default {
 
 		},
 
-        changePrice() {},
-        changeMileage() {},
-        spareSelectList() {},
-        spareClose() {},
-        spareAddText() {},
-        spareCloseText() {},
-
         async formSubmit() {
 
 			this.formError = false;
@@ -274,6 +234,11 @@ export default {
                 price: this.form.price,
                 mileage: this.form.mileage,
                 descr: this.form.descr,
+                //
+                edit: false,
+                more: false,
+                mark: false,
+                preDel: false,
             };
 
             const ans = await this.createItemCarLog(newItem);
@@ -293,6 +258,43 @@ export default {
             this.switchFormAdd(false);
             this.clearForm();
         },
+
+        formEdit() {
+
+            //объект даты в строку
+            function formatDate(d) {
+                var month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2) 
+                    month = '0' + month;
+                if (day.length < 2) 
+                    day = '0' + day;
+
+                return [day, month, year].join('.');
+            }
+
+            let form = this.form;
+
+            this.entry.type = form.type;
+            this.entry.date = formatDate(form.date);
+            this.entry.price = form.price;
+            this.entry.mileage = form.mileage;
+            this.entry.descr = form.descr;
+
+console.log(this.entry);
+
+            this.editItemCarLog(this.entry);
+
+            this.entry.edit = false;
+
+
+        },
+
+        formEditCancel() {
+            this.entry.edit = false;
+        }
 
     },
 

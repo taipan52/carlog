@@ -99,6 +99,8 @@ export default new Vuex.Store({
             //запись успешно добавлена
             if(ans.success) {
 
+console.log(newItem);
+
                 ctx.commit('switchFormAdd', false);
 
                 if(ctx.getters.carLog.listPgn.page == 1) {
@@ -116,6 +118,31 @@ export default new Vuex.Store({
             }
 
             return ans;
+
+        },
+
+        //изминение записи в журнале
+        async editItemCarLog(ctx, editItem) {
+
+			//собираем данные
+			const params = new URLSearchParams();
+			params.append('action', 'edit_entry');
+			params.append('id', editItem.id);
+			params.append('UF_SERVICE_TYPE', editItem.type.id);
+			params.append('UF_DATE', editItem.date );
+			params.append('UF_PRICE', editItem.price );
+			params.append('UF_MILEAGE', editItem.mileage );
+			params.append('UF_DESCRIPTION', editItem.descr);
+
+
+			const res = await axios.post(AJAX_URL, params);
+            const ans = await res.data;
+
+            //если сохранение не успешно
+            if(!ans.success) {
+                console.log(ans);
+                alert(ans.html);
+            }
 
         },
 

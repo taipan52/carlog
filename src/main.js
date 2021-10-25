@@ -17,7 +17,7 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
-Vue.use(money)
+Vue.use(money, {precision: 4})
 Vue.component('v-select', vSelect)
 Vue.component('date-picker', DatePicker)
 Vue.component('paginate', Paginate)
@@ -25,4 +25,4 @@ Vue.component('paginate', Paginate)
 new Vue({
   store,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#carlog')

@@ -501,6 +501,7 @@ body .main-area .content {
 .td-carlog__form-type {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .td-carlog .inpt,
@@ -694,6 +695,14 @@ body .main-area .content {
 
 }
 
+.td-carlog__list-item {
+    transition: all .5s;
+}
+
+.td-carlog__list-item:last-child {
+    border-bottom: none;
+}
+
 .td-carlog__list.blocked:before {
     content: "";
     position: absolute;
@@ -723,38 +732,58 @@ body .main-area .content {
     top: 50%;  
 }
 
-.td-carlog__list-item {
+.list-item__wrap {
     position: relative;
-    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
     border-radius: 2px;
-    padding: 10px 50px 10px 10px;
-    margin-bottom: 10px;
-    transition: all .5s;
+    padding: 15px 50px 15px 15px;
     min-height: 100px;
+    -webkit-transition: .2s;
+    transition: .2s;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.td-carlog__list-item:last-child {
-    border: none;
+.list-item__wrap:hover {
+    background-color: #f7f7f7;
 }
 
-.td-carlog__list-item .name {
+.list-item__wrap.more {
+    cursor: default;
+    background-color: #eee;
+}
+
+.list-item__wrap.more .list-item__control {
+    right: 15px;
+    opacity: 1;
+}
+
+.list-item__wrap .name {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 230px;
+    min-height: 80px;
+    padding-left: 85px;
 }
 
-.td-carlog__list-item .name:before {
+.list-item__wrap .name:before {
     content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
     display: inline-block;
-    width: 48px;
-    height: 48px;
+    width: 70px;
+    height: 80px;
     background-color: #d6eeb3;
-    border-radius: 50%;
+    border-radius: 10px;
     vertical-align: middle;
-    margin-right: 10px;
     background-repeat: no-repeat;
 }
 
-.td-carlog__list-item .name:after {
+.list-item__wrap .name:after {
     content: "";
     display: inline-block;
     width: 30px;
@@ -763,34 +792,89 @@ body .main-area .content {
     background-image: url(images/sprite_icon.png);
     background-repeat: no-repeat;
     position: absolute;
-    left: 9px;
-    top: 9px;
+    left: 20px;
+    top: 35px;
 }
 
-.td-carlog__list-item .price {
-    position: relative;
+.list-item__wrap .name-text {
     display: inline-block;
-    padding: 4px 6px;
-    background-color: #aaa;
-    color: #fff;
-    margin: 0 5px;
-    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
-.td-carlog__list-item .price:after {
+.list-item__wrap .date {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 70px;
+    border-radius: 10px 10px 0 0;
+    font-size: 11px;
+    line-height: 1;
+    color: #fff;
+    background-color: #8dbc49;
+    padding: 8px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.list-item__wrap .price {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    display: inline-block;
+    padding: 8px 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.list-item__wrap .price:after {
     content: "₽";
     display: inline-block;
     margin-left: 3px;
 }
 
-.td-carlog__list-item .mileage {
-    position: relative;
+.list-item__wrap .mileage {
+    display: block;
+    margin-top: 5px;
+}
+
+.list-item__wrap .mileage:after {
+    content: "км.";
     display: inline-block;
-    padding: 4px 6px;
-    background-color: #888;
-    color: #fff;
-    margin-right:10px;
-    border-radius: 4px;
+    margin-left: 3px;
+}
+
+.list-item__wrap .descr {
+    position: relative;
+    width: calc(100% - 360px);
+    margin: 5px 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: 36px;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.list-item__wrap.more .descr {
+    overflow: visible;
+    max-height: none;
+    -webkit-line-clamp: inherit;
+}
+
+.list-item__wrap .option-list {
+    display: none;
+    width: 100%;
+    margin: 15px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.list-item__wrap.more .option-list {
+    display: block;
 }
 
 .td-carlog .ico-1,
@@ -827,7 +911,6 @@ body .main-area .content {
 
 .td-carlog .mx-datepicker {
     width: 130px;
-    margin-left: 10px;
 }
 
 .td-carlog .mx-input {
@@ -1199,6 +1282,30 @@ body .mx-datepicker-popup {
     cursor: default;
 }
 
+.td-carlog__pagen li:first-child a,
+.td-carlog__pagen li:last-child a {
+    position: relative;
+    text-indent: -10000px;
+}
+
+.td-carlog__pagen li:first-child a:before,
+.td-carlog__pagen li:last-child a:before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-top: 1px solid #333;
+    border-right: 1px solid #333;
+    transform: rotate(45deg);
+}
+
+.td-carlog__pagen li:first-child a:before {
+    transform: rotate(225deg);
+    left: 12px;
+}
+
 .td-carlog .vs__dropdown-toggle {
     height: 42px;
     overflow: hidden;
@@ -1206,9 +1313,12 @@ body .mx-datepicker-popup {
 
 .list-item__control {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: -30px;
     height: 100%;
+    opacity: 0;
+    -webkit-transition: .2s;
+    transition: .2s;
 }
 
 .list-item__control .edit {
@@ -1364,11 +1474,36 @@ body .mx-datepicker-popup {
     }
 
     .td-carlog__form {
-        margin: 0 -15px 15px -15px;
+        margin: 0 -15px;
         padding: 15px;
         border-radius: 0;
     }
 
+    .list-item__wrap.more .descr {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+}
+
+@media only screen and (max-width: 640px) {
+
+    .list-item__wrap {
+        padding: 15px;
+    }
+
+    .list-item__wrap .price {
+        right: 15px;
+    }
+
+    .list-item__wrap.more .price {
+        right: 60px;
+    }
+
+    .list-item__wrap .descr {
+        width: 100%;
+        margin-top: 15px;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -1386,6 +1521,11 @@ body .mx-datepicker-popup {
     .td-carlog__item {
         border: 0;
         margin: 0 -15px; 
+    }
+
+    .list-item__wrap {
+        border: 0;
+        margin: 0 -15px;
     }
 
 }
@@ -1431,6 +1571,12 @@ body .mx-datepicker-popup {
         display: flex;
         align-items: center;
         white-space: nowrap;
+    }
+
+    .list-item__wrap .price {
+        top: 60px;
+        left: 100px;
+        right: auto;
     }
 
 }
